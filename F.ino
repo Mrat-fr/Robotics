@@ -14,9 +14,9 @@ Zumo32U4IMU imu;
 
 unsigned int lineSensorValues[3];
 int detectedhouse = 0;
-const uint16_t turnSpeed = 200;// Motor speed when turning.  400 is the max speed.
-const int DetectBorder = 600; // Threshold for detecting a line (black space)
-const int OpenSpace = 250; // Lower threshold for detecting white space, potentially adjust based on your setup
+const uint16_t turnSpeed = 200;
+const int DetectBorder = 600; //detecting black line 
+const int OpenSpace = 250; //detecting white space
 
 
 void setup() {
@@ -26,7 +26,7 @@ void setup() {
 }
 
 void loop() {
-  while(detectedhouse <= 2) {
+  while(detectedhouse == 0) {
     navigateMaze();
     if (detectHouse()) {
       detectedhouse++;
@@ -34,27 +34,28 @@ void loop() {
       turnAround();
     }
   } 
-  ledGreen(1)
-  ReturnHome();
+  ledGreen(1);
 }
 
 void navigateMaze() {
     lineSensors.read(lineSensorValues, QTR_EMITTERS_ON);
     if (lineSensorValues[0] > DetectBorder || lineSensorValues[1] > DetectBorder || lineSensorValues[2] > DetectBorder) {
-      motors.setSpeeds(0, 0); // Stop to decide next move
-    if (return lineSensorValues[2] < DetectBorder;) {
-      turnRight();// If right is clear, prefer turning right
-    } else if (return lineSensorValues[0] < DetectBorder;) {
-      turnLeft();// If cannot turn right but can go forward, proceed
-    } else if (return lineSensorValues[0] < OpenSpace;) {
-      motors.setSpeeds(100, 100);// If right and forward are blocked, try left
+      motors.setSpeeds(0, 0);
+    if (lineSensorValues[0] < DetectBorder) {
+      BackWard();
+      Left();
+    } else if (lineSensorValues[2] < DetectBorder) {
+      BackWard();
+      Right();
+    } else if (lineSensorValues[0] < OpenSpace) {
+      BackWard();
+      motors.setSpeeds(100, 100);
     } else {
-      goBackWard();
-      delay(550); 
+      BackWard();
       turnAround();
     }
   } else {
-  goStraight();
+  motors.setSpeeds(100, 100);
 }
   
 
@@ -84,8 +85,8 @@ void turnAround() {
   motors.setSpeeds(0, 0);
 }
 
-void goBackWard() {
-  motors.setSpeeds(-100, 100);
+void BackWard() {
+  motors.setSpeeds(200, -200);
   delay(100);
   motors.setSpeeds(0, 0);
 }
@@ -102,8 +103,4 @@ bool detectHouse() {
   }else{
     return false;
   }
-}
-
-void ReturnHome() {
-
 }
