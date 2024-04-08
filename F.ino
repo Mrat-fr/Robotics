@@ -41,12 +41,12 @@ void navigateMaze() {
     lineSensors.read(lineSensorValues, QTR_EMITTERS_ON);
     if (lineSensorValues[0] > DetectBorder || lineSensorValues[1] > DetectBorder || lineSensorValues[2] > DetectBorder) {
       motors.setSpeeds(0, 0);
-    if (lineSensorValues[0] < DetectBorder) {
-      BackWard();
-      Left();
-    } else if (lineSensorValues[2] < DetectBorder) {
+    if (lineSensorValues[2] < DetectBorder) {
       BackWard();
       Right();
+    } else if (lineSensorValues[0] < DetectBorder) {
+      BackWard();
+      Left();
     } else if (lineSensorValues[0] < OpenSpace) {
       BackWard();
       motors.setSpeeds(100, 100);
@@ -105,3 +105,4 @@ bool detectHouse() {
     return false;
   }
 }
+
