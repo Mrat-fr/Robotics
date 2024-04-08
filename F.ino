@@ -97,9 +97,10 @@ bool detectHouse() {
   int center_rightsensor = proxSensors.countsFrontWithRightLeds();
 
   if (center_leftsensor == 6 && center_rightsensor == 6) {//change
-      buzzer.playFrequency(440, 200, 15);
-      delay(1000);
-      return true;
+    motors.setSpeeds(0, 0);
+    buzzer.playFrequency(440, 200, 15);
+    delay(1000);
+    return true;
   }else{
     return false;
   }
